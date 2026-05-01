@@ -9,6 +9,10 @@
 #include <codecvt>
 #endif
 
+#ifdef __linux__
+#include <malloc.h>
+#endif
+
 #include <pybind/docling_resources.h>
 
 #include <parse.h>
@@ -217,6 +221,9 @@ namespace docling
     if(key2doc.count(key)==1)
       {
         key2doc.erase(key);
+#ifdef __linux__
+        malloc_trim(0);
+#endif
         return true;
       }
     else
@@ -235,6 +242,9 @@ namespace docling
       {
         doc_decoder_ptr_type decoder_ptr = itr->second;
         decoder_ptr->unload_page(page_num);
+#ifdef __linux__
+        malloc_trim(0);
+#endif
       }
     else
       {
